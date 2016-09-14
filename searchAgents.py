@@ -361,9 +361,23 @@ def cornersHeuristic(state, problem):
     """
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
+    heuristic = 0 
+    curr_pos = state[0]
+    remCorners = list(state[1])
 
-    "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+    while len(remCorners) > 0: 
+        closestCornerDist = float("inf")
+        for corner in remCorners: 
+            if euclideanDistance(curr_pos, corner) < closestCornerDist: 
+                closestCornerDist = euclideanDistance(curr_pos,corner)
+            remCorners.remove(corner)
+        heuristic+= closestCornerDist
+                
+    return heuristic  # Default to trivial solution
+
+
+def euclideanDistance (X, Y):
+    return abs(X[0] - Y[0]) + abs(X[1] - Y[1])
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
