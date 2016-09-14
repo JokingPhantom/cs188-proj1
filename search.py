@@ -18,6 +18,7 @@ Pacman agents (in searchAgents.py).
 """
 
 import util
+import copy
 
 class SearchProblem:
     """
@@ -86,17 +87,72 @@ def depthFirstSearch(problem):
     print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
-    "*** YOUR CODE HERE ***"
+    closed = set()
+    fringe = util.Stack()
+    fringe.push([problem.getStartState(),[]])
+    while 1: 
+        if fringe.isEmpty(): 
+            print("Error, goal not found")
+            return
+        node=fringe.pop()
+        nextState=node[0]
+        move_list=node[1]
+        if problem.isGoalState(nextState):
+            return move_list
+        if nextState not in closed: 
+            closed.add(nextState)
+            for child in problem.getSuccessors(nextState): 
+                new_node = copy.deepcopy(node)
+                new_node[0] = child[0]
+                new_node[1].append(child[1]) 
+                fringe.push(new_node) 
+
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
+    closed = set()
+    fringe = util.Queue()
+    fringe.push([problem.getStartState(),[]])
+    while 1: 
+        if fringe.isEmpty(): 
+            print("Error, goal not found")
+            return
+        node=fringe.pop()
+        nextState=node[0]
+        move_list=node[1]
+        if problem.isGoalState(nextState):
+            return move_list
+        if nextState not in closed: 
+            closed.add(nextState)
+            for child in problem.getSuccessors(nextState): 
+                new_node = copy.deepcopy(node)
+                new_node[0] = child[0]
+                new_node[1].append(child[1]) 
+                fringe.push(new_node) 
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
+    closed = set()
+    fringe = util.PriorityQueue()
+    fringe.push([problem.getStartState(),[]], 0)
+    while 1: 
+        if fringe.isEmpty(): 
+            print("Error, goal not found")
+            return
+        node=fringe.pop()
+        nextState=node[0]
+        move_list=node[1]
+        if problem.isGoalState(nextState):
+            return move_list
+        if nextState not in closed: 
+            closed.add(nextState)
+            for child in problem.getSuccessors(nextState): 
+                new_node = copy.deepcopy(node)
+                new_node[0] = child[0]
+                new_node[1].append(child[1]) 
+                fringe.push(new_node, problem.getCostOfActions(new_node[1])) 
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -108,7 +164,25 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
+    closed = set()
+    fringe = util.PriorityQueue()
+    fringe.push([problem.getStartState(),[]], 0+heuristic(problem.getStartState(),problem))
+    while 1: 
+        if fringe.isEmpty(): 
+            print("Error, goal not found")
+            return
+        node=fringe.pop()
+        nextState=node[0]
+        move_list=node[1]
+        if problem.isGoalState(nextState):
+            return move_list
+        if nextState not in closed: 
+            closed.add(nextState)
+            for child in problem.getSuccessors(nextState): 
+                new_node = copy.deepcopy(node)
+                new_node[0] = child[0]
+                new_node[1].append(child[1]) 
+                fringe.push(new_node, problem.getCostOfActions(new_node[1])+heuristic(new_node[0],problem)) 
     util.raiseNotDefined()
 
 

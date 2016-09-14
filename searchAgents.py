@@ -273,7 +273,7 @@ class CornersProblem(search.SearchProblem):
     You must select a suitable state space and successor function
     """
 
-    def __init__(self, startingGameState):
+    def __init__(self, startingGameState, goal =(True,True,True,True)):
         """
         Stores the walls, pacman's starting position and corners.
         """
@@ -287,21 +287,23 @@ class CornersProblem(search.SearchProblem):
         self._expanded = 0 # DO NOT CHANGE; Number of search nodes expanded
         # Please add any code here which you would like to use
         # in initializing the problem
-        "*** YOUR CODE HERE ***"
+        self.corners_reached = (False, False, False, False)
+        self.corners_reached_list = [False, False, False, False]
+        self.goal = goal
 
     def getStartState(self):
         """
         Returns the start state (in your state space, not the full Pacman state
         space)
         """
-        "*** YOUR CODE HERE ***"
+        return (self.startingPosition, self.corners_reached)
         util.raiseNotDefined()
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
-        "*** YOUR CODE HERE ***"
+        return state[1] == self.goal
         util.raiseNotDefined()
 
     def getSuccessors(self, state):
@@ -319,13 +321,19 @@ class CornersProblem(search.SearchProblem):
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
             # Here's a code snippet for figuring out whether a new position hits a wall:
-            #   x,y = currentPosition
-            #   dx, dy = Actions.directionToVector(action)
-            #   nextx, nexty = int(x + dx), int(y + dy)
-            #   hitsWall = self.walls[nextx][nexty]
-
-            "*** YOUR CODE HERE ***"
-
+            x,y = state[1][0], state[1][1]
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            hitsWall = self.walls[nextx][nexty]
+            if not hitsWall:
+                i = 0 
+                while i <= len(self.corners)-1: 
+                    if self.corners[i] == (nextx,nexty): 
+                        self.corners_reached_list[i] = True 
+                    i+=1 
+                self.corners_reached = tuple(self.corners_reached_list)
+                successors.append((((nextx,nexty), self.corners_reached), action, 1))
+                print successors
         self._expanded += 1 # DO NOT CHANGE
         return successors
 
