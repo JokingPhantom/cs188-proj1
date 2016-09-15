@@ -364,20 +364,23 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
     heuristic = 0
     curr_pos = state[0]
-    remCorners = list(state[1])
+    remCorners = copy.deepcopy(list(state[1]))
+
 
     while len(remCorners) > 0:
         closestCornerDist = float("inf")
         for corner in remCorners:
-            if euclideanDistance(curr_pos, corner) < closestCornerDist:
-                closestCornerDist = euclideanDistance(curr_pos,corner)
-            remCorners.remove(corner)
+            if manhattanDistance(curr_pos, corner) < closestCornerDist:
+                closestCornerDist = manhattanDistance(curr_pos,corner)
+                closestPoint = corner
         heuristic+= closestCornerDist
+        remCorners.remove(closestPoint)
+        curr_pos = closestPoint
 
     return heuristic  # Default to trivial solution
 
 
-def euclideanDistance (X, Y):
+def manhattanDistance (X, Y):
     return abs(X[0] - Y[0]) + abs(X[1] - Y[1])
 
 class AStarCornersAgent(SearchAgent):
@@ -479,12 +482,12 @@ def foodHeuristic(state, problem):
     closestFood = (0,0)
     foodListcpy=copy.deepcopy(foodList)
     while len(foodListcpy) > 0:
-        if euclideanDistance(position, foodListcpy[0]) < closestFoodDist:
-            closestFoodDist = euclideanDistance(position, foodListcpy[0])
+        if manhattanDistance(position, foodListcpy[0]) < closestFoodDist:
+            closestFoodDist = manhattanDistance(position, foodListcpy[0])
             closestFood = foodListcpy[0]
         foodListcpy.remove(foodListcpy[0])
 
-    return mazeDistance(position, closestFood, problem.startingGameState) + len(foodList)
+    return mazeDistance(position, closestFood, problem.startingGameState)
 
 
 class ClosestDotSearchAgent(SearchAgent):
