@@ -475,19 +475,17 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     foodList = foodGrid.asList()
+    gameState = problem.startingGameState
     if len(foodList)==0:
         return 0
 
-    closestFoodDist = float("inf")
-    closestFood = (0,0)
     foodListcpy=copy.deepcopy(foodList)
-    while len(foodListcpy) > 0:
-        if manhattanDistance(position, foodListcpy[0]) < closestFoodDist:
-            closestFoodDist = manhattanDistance(position, foodListcpy[0])
-            closestFood = foodListcpy[0]
-        foodListcpy.remove(foodListcpy[0])
+    foodListcpy.sort(key=lambda pos: manhattanDistance(position, pos))
 
-    return mazeDistance(position, closestFood, problem.startingGameState)
+    #if len(foodListcpy) > 1:
+    #    return mazeDistance(foodListcpy[-2], foodListcpy[-1], gameState) + mazeDistance(position, foodListcpy[-2], gameState)
+    #else:
+    return mazeDistance(position, foodListcpy[-1], gameState)
 
 
 class ClosestDotSearchAgent(SearchAgent):
