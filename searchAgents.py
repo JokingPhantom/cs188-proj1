@@ -476,13 +476,15 @@ def foodHeuristic(state, problem):
         return 0 
 
     closestFoodDist = float("inf")
+    closestFood = (0,0)
     foodListcpy=copy.deepcopy(foodList)
     while len(foodListcpy) > 0: 
         if euclideanDistance(position, foodListcpy[0]) < closestFoodDist: 
             closestFoodDist = euclideanDistance(position, foodListcpy[0])
+            closestFood = foodListcpy[0]
         foodListcpy.remove(foodListcpy[0])
 
-    return closestFoodDist + len(foodList)
+    return mazeDistance(position, closestFood, problem.startingGameState) + len(foodList)
      
 
 class ClosestDotSearchAgent(SearchAgent):
