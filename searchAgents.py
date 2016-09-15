@@ -482,9 +482,6 @@ def foodHeuristic(state, problem):
     foodListcpy=copy.deepcopy(foodList)
     foodListcpy.sort(key=lambda pos: manhattanDistance(position, pos))
 
-    #if len(foodListcpy) > 1:
-    #    return mazeDistance(foodListcpy[-2], foodListcpy[-1], gameState) + mazeDistance(position, foodListcpy[-2], gameState)
-    #else:
     return mazeDistance(position, foodListcpy[-1], gameState)
 
 
