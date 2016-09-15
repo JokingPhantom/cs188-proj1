@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -326,7 +326,7 @@ class CornersProblem(search.SearchProblem):
             if not hitsWall:
                 nextPos = (nextx,nexty)
                 remCorners = list(state[1])
-                if nextPos in remCorners: 
+                if nextPos in remCorners:
                     remCorners.remove(nextPos)
                 nextState = (nextPos, tuple(remCorners))
                 successors.append((nextState, action, 1))
@@ -362,18 +362,18 @@ def cornersHeuristic(state, problem):
     """
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
-    heuristic = 0 
+    heuristic = 0
     curr_pos = state[0]
     remCorners = list(state[1])
 
-    while len(remCorners) > 0: 
+    while len(remCorners) > 0:
         closestCornerDist = float("inf")
-        for corner in remCorners: 
-            if euclideanDistance(curr_pos, corner) < closestCornerDist: 
+        for corner in remCorners:
+            if euclideanDistance(curr_pos, corner) < closestCornerDist:
                 closestCornerDist = euclideanDistance(curr_pos,corner)
             remCorners.remove(corner)
         heuristic+= closestCornerDist
-                
+
     return heuristic  # Default to trivial solution
 
 
@@ -472,20 +472,20 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     foodList = foodGrid.asList()
-    if len(foodList)==0: 
-        return 0 
+    if len(foodList)==0:
+        return 0
 
     closestFoodDist = float("inf")
     closestFood = (0,0)
     foodListcpy=copy.deepcopy(foodList)
-    while len(foodListcpy) > 0: 
-        if euclideanDistance(position, foodListcpy[0]) < closestFoodDist: 
+    while len(foodListcpy) > 0:
+        if euclideanDistance(position, foodListcpy[0]) < closestFoodDist:
             closestFoodDist = euclideanDistance(position, foodListcpy[0])
             closestFood = foodListcpy[0]
         foodListcpy.remove(foodListcpy[0])
 
     return mazeDistance(position, closestFood, problem.startingGameState) + len(foodList)
-     
+
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
@@ -516,6 +516,7 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
+        return search.aStarSearch(problem)
         util.raiseNotDefined()
 
 class AnyFoodSearchProblem(PositionSearchProblem):
@@ -552,7 +553,8 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return self.food[x][y]
+        #util.raiseNotDefined()
 
 def mazeDistance(point1, point2, gameState):
     """
